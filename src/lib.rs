@@ -63,7 +63,7 @@ mod tests
     }
 
     fn test<T>(mut v : Vec<T>)
-    where T : Copy + Into<u64> + std::cmp::Ord + std::fmt::Debug
+    where T : Copy + Into<u64> + Ord + std::fmt::Debug
     {
         let mut w = v.clone();
 
