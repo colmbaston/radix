@@ -1,4 +1,4 @@
-pub fn radix_sort<T : Clone>(input : &mut Vec<T>, get_key : impl Fn(&T) -> u64)
+pub fn radix_sort<T : Clone>(a : &mut [T], get_key : impl Fn(&T) -> u64)
 {
     const RADIX      : u64   = 8;
     const ITERATIONS : u64   = 64 / RADIX;
@@ -6,13 +6,16 @@ pub fn radix_sort<T : Clone>(input : &mut Vec<T>, get_key : impl Fn(&T) -> u64)
     const MASK       : u64   = BUCKETS as u64 - 1;
 
     let mut buckets = Vec::with_capacity(BUCKETS);
-    let mut output  = Vec::with_capacity(input.len());
+    let mut buffer  = Vec::with_capacity(a.len());
 
     unsafe
     {
         buckets.set_len(BUCKETS);
-        output.set_len(input.len());
+        buffer.set_len(a.len());
     }
+
+    let mut input  = &mut *a;
+    let mut output = &mut *buffer;
 
     for shift in (0 .. ITERATIONS).map(|i| i * RADIX)
     {
@@ -27,7 +30,7 @@ pub fn radix_sort<T : Clone>(input : &mut Vec<T>, get_key : impl Fn(&T) -> u64)
             output[*index] = k.clone();
         }
 
-        std::mem::swap(input, &mut output);
+        std::mem::swap(&mut input, &mut output);
     }
 }
 
